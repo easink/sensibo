@@ -130,8 +130,8 @@
                 '';
                 serviceConfig = {
                   Type = "simple";
-                  User = cfg.user;
-                  Group = cfg.user;
+                  User = user;
+                  Group = user;
                   DynamicUser = "yes";
                   Restart = "on-failure";
                   RestartSec = 5;
