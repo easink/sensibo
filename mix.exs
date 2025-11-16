@@ -12,7 +12,8 @@ defmodule Sensibo.MixProject do
         sensibo: [
           include_executables_for: [:unix],
           applications: [runtime_tools: :permanent],
-          steps: [:assemble, :tar]
+          # steps: [:assemble, :tar]
+          steps: [:assemble]
         ]
       ]
     ]
@@ -31,7 +32,7 @@ defmodule Sensibo.MixProject do
     [
       {:req, "~> 0.5.0"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
-      {:instream, "~> 2.0"},
+      {:instream, "~> 2.0"}
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
     ]
   end

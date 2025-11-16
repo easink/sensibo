@@ -29,9 +29,10 @@
       myApp = beamPackages.mixRelease {
         pname = name;
         version = version;
-        src = ./.;
+        src = self;
 
         mixEnv = "prod";
+        removeCookie = false;
 
         nativeBuildInputs = [
           beamPackages.hex
@@ -42,22 +43,40 @@
       };
     in
     {
-      packages.${system}.default = myApp;
-
-      devShell = pkgs.mkShell {
-        buildInputs = [
-          nixpkgs.elixir
-          nixpkgs.beamPackages.hex
-          nixpkgs.beamPackages.rebar3
-          nixpkgs.git
-          nixpkgs.inotify-tools
-          # pkgs.nodejs # only if using assets (e.g., Phoenix)
-        ];
-
-        shellHook = ''
-          export MIX_ENV=prod
-        '';
+      packages.${system} = {
+        default = myApp;
+        container = pkgs.dockerTools.buildImage {
+          inherit name;
+          tag = version;
+          created = "now";
+          # contents = self;
+          copyToRoot = pkgs.buildEnv {
+            name = "${name}-root";
+            paths = [ myApp ];
+            pathsToLink = [ "/bin" ];
+          };
+          # contents = packages.${system}.default;
+          # config.Cmd = [ "${self}/bin/sensibo" ];
+          config.Cmd = [ "/bin/sensibo" ];
+          # config.Cmd = [ "${packages.${system}.default}/bin/sensibo" ];
+        };
       };
+
+      # devShells.${system}.default = pkgs.mkShell {
+      #   buildInputs = [
+      #     pkgs.elixir
+      #     pkgs.beamPackages.hex
+      #     pkgs.beamPackages.rebar3
+      #     pkgs.git
+      #     pkgs.inotify-tools
+      #     pkgs.hello
+      #     # pkgs.nodejs # only if using assets (e.g., Phoenix)
+      #   ];
+
+      #   shellHook = ''
+      #     export MIX_ENV=prod
+      #   '';
+      # };
 
       nixosModules.default =
         {
