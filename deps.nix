@@ -49,15 +49,28 @@ let
 
     credo = buildMix rec {
       name = "credo";
-      version = "1.7.12";
+      version = "1.7.15";
 
       src = fetchHex {
         pkg = "credo";
         version = "${version}";
-        sha256 = "8493d45c656c5427d9c729235b99d498bd133421f3e0a683e5c1b561471291e5";
+        sha256 = "291e8645ea3fea7481829f1e1eb0881b8395db212821338e577a90bf225c5607";
       };
 
       beamDeps = [ bunt file_system jason ];
+    };
+
+    extrace = buildMix rec {
+      name = "extrace";
+      version = "0.6.0";
+
+      src = fetchHex {
+        pkg = "extrace";
+        version = "${version}";
+        sha256 = "499c416c363cda0c4a8523e0460d5a6f7a7cdaccf9e180022e4ec0d25735beca";
+      };
+
+      beamDeps = [ recon ];
     };
 
     file_system = buildMix rec {
@@ -294,14 +307,27 @@ let
       beamDeps = [];
     };
 
+    recon = buildMix rec {
+      name = "recon";
+      version = "2.5.6";
+
+      src = fetchHex {
+        pkg = "recon";
+        version = "${version}";
+        sha256 = "96c6799792d735cc0f0fd0f86267e9d351e63339cbe03df9d162010cefc26bb0";
+      };
+
+      beamDeps = [];
+    };
+
     req = buildMix rec {
       name = "req";
-      version = "0.5.15";
+      version = "0.5.17";
 
       src = fetchHex {
         pkg = "req";
         version = "${version}";
-        sha256 = "a6513a35fad65467893ced9785457e91693352c70b58bbc045b47e5eb2ef0c53";
+        sha256 = "0b8bc6ffdfebbc07968e59d3ff96d52f2202d0536f10fef4dc11dc02a2a43e39";
       };
 
       beamDeps = [ finch jason mime nimble_csv ];
