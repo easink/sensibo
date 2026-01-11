@@ -97,10 +97,20 @@
               type = lib.types.str;
               description = "SENSIBO_APIKEY";
             };
+            influxdb_version = lib.mkOption {
+              type = lib.types.str;
+              default = "v2";
+              description = "INFLUXDB_VERSION";
+            };
             influxdb_host = lib.mkOption {
               type = lib.types.str;
               default = "127.0.0.1";
               description = "INFLUXDB_HOST";
+            };
+            influxdb_port = lib.mkOption {
+              type = lib.types.int;
+              default = 8086;
+              description = "INFLUXDB_PORT";
             };
             influxdb_org = lib.mkOption {
               type = lib.types.str;
@@ -114,8 +124,24 @@
             };
             influxdb_bucket_token = lib.mkOption {
               type = lib.types.str;
+              default = "default_token";
               description = "INFLUXDB_BUCKET_TOKEN";
             };
+            influxdb_v1_database = lib.mkOption {
+              type = lib.types.str;
+              default = "sensibo";
+              description = "INFLUXDB_DATABASE";
+            };
+            # influxdb_v1_username = lib.mkOption {
+            #   type = lib.types.str;
+            #   default = "default";
+            #   description = "INFLUXDB_V1_USERNAME";
+            # };
+            # influxdb_v1_password = lib.mkOption {
+            #   type = lib.types.str;
+            #   default = "default";
+            #   description = "INFLUXDB_V1_PASSWORD";
+            # };
             cookie = lib.mkOption {
               type = lib.types.str;
               default = "bad_cookie";
@@ -127,10 +153,6 @@
               {
                 assertion = cfg.sensibo_apikey != "";
                 message = "A api key for sensibo is necessary";
-              }
-              {
-                assertion = cfg.influxdb_bucket_token != "";
-                message = "A token for influx is necessary";
               }
             ];
 
@@ -163,11 +185,15 @@
                 # path = [ pkgs.bash ];
 
                 environment = {
-
                   SENSIBO_APIKEY = cfg.sensibo_apikey;
+                  INFLUXDB_VERSION = cfg.influxdb_version;
+                  INFLUXDB_V1_DATABASE = cfg.influxdb_v1_database;
+                  # INFLUXDB_V1_USERNAME = cfg.influxdb_v1_username;
+                  # INFLUXDB_V1_PASSWORD = cfg.influxdb_v1_password;
                   INFLUXDB_BUCKET = cfg.influxdb_bucket;
                   INFLUXDB_BUCKET_TOKEN = cfg.influxdb_bucket_token;
                   INFLUXDB_HOST = cfg.influxdb_host;
+                  INFLUXDB_PORT = toString (cfg.influxdb_port);
                   INFLUXDB_ORG = cfg.influxdb_org;
                   #
                   # Disable Erlang's distributed features
