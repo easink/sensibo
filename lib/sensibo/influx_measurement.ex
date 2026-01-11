@@ -29,11 +29,11 @@ defmodule Sensibo.Influx.Measurement do
     |> set_tag(:id, id)
     |> set_tag(:name, name || "unknown")
     |> set_field(:co2, measurement["co2"])
-    |> set_field(:feels_like, measurement["feelsLike"])
-    |> set_field(:humidity, measurement["humidity"])
+    |> set_field(:feels_like, measurement["feelsLike"] |> float())
+    |> set_field(:humidity, measurement["humidity"] |> float())
     |> set_field(:iaq, measurement["iaq"])
     |> set_field(:rssi, measurement["rssi"])
-    |> set_field(:temperature, measurement["temperature"])
+    |> set_field(:temperature, measurement["temperature"] |> float())
     |> set_field(:tvoc, measurement["tvoc"])
     |> set_timestamp(timestamp)
   end
@@ -49,4 +49,6 @@ defmodule Sensibo.Influx.Measurement do
   defp set_timestamp(data, timestamp) do
     %{data | timestamp: timestamp}
   end
+
+  defp float(value), do: :erlang.float(value)
 end
